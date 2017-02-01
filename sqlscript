@@ -1,0 +1,61 @@
+drop SCHEMA if exists user;
+CREATE SCHEMA if not exists user;
+
+CREATE USER if not exists 'user'@'localhost' IDENTIFIED BY 'user_role_pass';
+GRANT ALL privileges on user.* to 'user'@'localhost';
+
+drop table if exists `user`.`users_roles`;
+drop table if exists `user`.`users`;
+CREATE TABLE `user`.`users` (
+  `uuid` VARCHAR(50) NOT NULL,
+  `username` VARCHAR(40) NOT NULL,
+  PRIMARY KEY (`uuid`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC));
+  
+  
+  Insert into `user`.`users` (`uuid`, `username`) values ('1','Gall Barni');
+  Insert into `user`.`users` (`uuid`, `username`) values ('2','Nagy Szilard');
+  Insert into `user`.`users` (`uuid`, `username`) values ('3','Szocs Csilla');
+  Insert into `user`.`users` (`uuid`, `username`) values ('4','Kiss Anna Katalin');
+  Insert into `user`.`users` (`uuid`, `username`) values ('5','Snoop Dogg');
+  
+drop table if exists `user`.`roles`;
+CREATE TABLE `user`.`roles` (
+  `uuid` VARCHAR(50) NOT NULL,
+  `userrole` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`uuid`),
+  UNIQUE INDEX `userrole_UNIQUE` (`userrole` ASC));
+
+  
+  
+  Insert into `user`.`roles` (`uuid`, `userrole`) values ('12','Developer');
+  Insert into `user`.`roles` (`uuid`, `userrole`) values ('13','Singer');
+  
+  drop table if exists `user`.`user_roles`;
+  CREATE TABLE `user`.`users_roles` (
+  `user_id` VARCHAR(50) NOT NULL,
+  `role_id` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`user_id`, `role_id`));
+  
+  ALTER TABLE `user`.`users_roles` 
+ADD INDEX `fk_role_id_idx` (`role_id` ASC);
+ALTER TABLE `user`.`users_roles` 
+ADD CONSTRAINT `fk_user_id`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `user`.`users` (`uuid`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_role_id`
+  FOREIGN KEY (`role_id`)
+  REFERENCES `user`.`roles` (`uuid`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  
+Insert into `user`.`users_roles` (`user_id`, `role_id`) values ('1','12');
+Insert into `user`.`users_roles` (`user_id`, `role_id`) values ('2','12');
+Insert into `user`.`users_roles` (`user_id`, `role_id`) values ('3','12');
+Insert into `user`.`users_roles` (`user_id`, `role_id`) values ('4','12');
+Insert into `user`.`users_roles` (`user_id`, `role_id`) values ('5','13');
+
+  
+  
