@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import gallb.wildfly.users.common.IUser;
 import model.User;
+import model.Role;
 
 @Stateless
 public class UserBean implements IUser{
@@ -27,5 +28,11 @@ public class UserBean implements IUser{
 		return oEntityManager.createQuery(criteria).getResultList();
 		//return (List<User>)oEntityManager.createNamedQuery("User.findAll").getResultList();
 	}
+
+	/*@Override
+	public List<Role> getRoles() {
+		
+		return null;
+	}*/
 
 }

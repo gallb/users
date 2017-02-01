@@ -12,7 +12,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import gallb.wildfly.users.common.IUser;
+import model.Role;
 import model.User;
+
 
 /**
  * @author gallb
@@ -46,5 +48,10 @@ public class ManagedBean implements Serializable, IUser{
 		//System.out.println("getUserBean*****************************************");
 		return oUserBean;
 	}
+
+/*@Override
+	public List<Role> getRoles() {
+		return getUserBean().getRoles();
+	}*/
 	
 }

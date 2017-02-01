@@ -3,7 +3,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
 <title>wildfly-users-web | echo_list</title>
@@ -11,7 +10,11 @@
 <body>
 	<h1>Get all users</h1>
 	<ui:repeat value="#{userbean.allUsers}" var="value">
-     #{value.uuid}  #{value.username} <br />
+     #{value.uuid}  #{value.username} 
+     <ui:repeat value="#{value.roles}" var="value2">
+     #{value2.userrole} 
+	</ui:repeat>
+		<br />
 	</ui:repeat>
 	<br />
 	<br />
