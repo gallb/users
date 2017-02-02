@@ -2,10 +2,8 @@ package gallb.wildfly.users.ejb;
 
 import java.util.List;
 import org.jboss.logging.Logger;
-import org.omg.CORBA.UShortSeqHolder;
 
 import javax.ejb.Stateless;
-import javax.jws.soap.SOAPBinding.Use;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -13,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import gallb.wildfly.users.common.IUser;
+import gallb.wildfly.users.common.UserBeanException;
 import model.User;
 
 @Stateless
@@ -65,7 +64,7 @@ public class UserBean implements IUser{
 	}
 
 	@Override
-	public boolean remove(String p_id) {
+	public boolean remove(String p_id){
 		User tmpUsr = oEntityManager.find(User.class, p_id); 
 		if (tmpUsr == null) {
 			oLogger.info("--delete by Id UserBean didn't find user--");

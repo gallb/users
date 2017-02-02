@@ -50,6 +50,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * 
 	 * @param p_id Id of entity that should be removed from persistence.
 	 * @return True if operation successful, false if not.
+	 * @throws UserBeanException 
 	 */
-	public boolean remove(String p_id);
+	public boolean remove(String p_id) throws UserBeanException;
 }

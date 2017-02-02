@@ -14,6 +14,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import gallb.wildfly.users.common.IUser;
+import gallb.wildfly.users.common.ManagedBeanException;
+import gallb.wildfly.users.common.UserBeanException;
 import model.User;
 
 
@@ -78,9 +80,13 @@ public class ManagedBean implements Serializable, IUser{
 	}
 
 	@Override
-	public boolean remove(String p_id) {
+	public boolean remove(String p_id) throws UserBeanException {
 		oLogger.info("--remove user by Id ManagedBean--");
-		return getUserBean().remove(p_id);
+		if(!getUserBean().remove(p_id)) {
+			throw new UserBeanException();
+		}
+		return true;
+		//return getUserBean().remove(p_id);
 	}
 
 	@Override
