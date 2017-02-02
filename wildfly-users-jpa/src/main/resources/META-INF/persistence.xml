@@ -3,6 +3,7 @@
 	<persistence-unit name="WildflyUsers"
 		transaction-type="JTA">
 		 <jta-data-source>java:jboss/datasources/WildflyUsers</jta-data-source>
+		 <class>model.BaseEntity</class>
 		 <class>model.Role</class>
 		 <class>model.User</class>
 	</persistence-unit>

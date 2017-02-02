@@ -18,5 +18,25 @@
 	</ui:repeat>
 	<br />
 	<br />
+	<h:selectOneMenu value="#{userbean.allUsers}">
+   			<f:selectItems value="#{userbean.allUsers}" var="c"
+   			itemLabel="#{c.username}" itemValue="#{c.uuid}" />
+   	</h:selectOneMenu>
+
+	<br />
+	<br />
+	
+	<h:commandButton value="Submit" action="#{userbean.submitAction}" />
+
+	<br />
+	<br />
+	
+	<h:selectOneMenu value="#{userbean.allUsers}" onchange="submit()"
+		valueChangeListener="#{}">
+   		<f:selectItems value="#{userbean.allUsers}" var="c"
+   		itemLabel="#{c.username}" itemValue="#{c.uuid}"/>
+   	</h:selectOneMenu>
+	
+	
 </body>
 </html>

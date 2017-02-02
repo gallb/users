@@ -2,8 +2,9 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The persistent class for the users database table.
@@ -12,11 +13,8 @@ import java.util.List;
 @Entity
 @Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-public class User implements Serializable {
+public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private String uuid;
 
 	private String username;
 
@@ -36,14 +34,6 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public String getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
 	public String getUsername() {
 		return this.username;
 	}
@@ -59,5 +49,7 @@ public class User implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-
+	public String toString(){
+		return this.getUsername();
+	}
 }

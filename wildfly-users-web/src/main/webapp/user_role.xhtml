@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<title>wildfly-users-web | echo_list</title>
+</head>
+<body>
+	<h1>Get all users</h1>
+	<ui:repeat value="#{userbean.all}" var="value">
+     #{value.uuid}  #{value.username} 
+     <ui:repeat value="#{value.roles}" var="value2">
+     #{value2.userrole} 
+	</ui:repeat>
+		<br />
+	</ui:repeat>
+	<br />
+	<br />	
+	<h1>Add new user</h1>
+	<h:form>
+		<h:inputText binding="#{tmpString}" />
+		<h:commandButton value="Submit"
+			action="#{userbean.store(tmpString.value)}" />
+	</h:form>
+	<br />
+	<br />
+	
+	<h1>Search user by id</h1>
+	<h:form>
+		<h:inputText binding="#{tmpString2}" />
+		<h:commandButton  value="Submit" 
+				action="#{userbean.getById(tmpString2.value)}" />
+	</h:form>
+	<h2>Search result</h2>
+	 <h:outputText value="#{userbean.getById(tmpString2.value)}"/>
+	<br />
+	<br />
+	
+	<h1>Remove by id</h1>
+	<h:form>
+		<h:inputText binding="#{delId}" />
+		<h:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
+	</h:form>
+	<br />
+	<br />
+	
+	<h1>Update Echo by Id</h1>
+	<h:form>
+		<h:inputText binding="#{updId}" />
+		<h:inputText binding="#{updName}" />
+		<h:commandButton value="Submit" action="#{userbean.update(updId.value, updName.value)}" />
+	</h:form>
+	<br />
+	<br />
+	
+	<h1>Search user by name</h1>
+	<h:form>
+		<h:inputText binding="#{name}" />
+		<h:commandButton value="Submit" action="#{userbean.search(name.value)}" />
+	</h:form>	
+	<!-- <ui:repeat value="{userbean.getUserList()}" var="value5">
+    #{value5.username} <br />
+	</ui:repeat> -->
+</body>
+</html>

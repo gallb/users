@@ -23,7 +23,10 @@
 	</build>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>gallb</groupId>
 			<artifactId>wildfly-users-common</artifactId>

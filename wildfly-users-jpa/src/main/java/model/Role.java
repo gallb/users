@@ -12,11 +12,8 @@ import java.util.List;
 @Entity
 @Table(name="roles")
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
-public class Role implements Serializable {
+public class Role extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private String uuid;
 
 	private String userrole;
 
@@ -25,14 +22,6 @@ public class Role implements Serializable {
 	private List<User> users;
 
 	public Role() {
-	}
-
-	public String getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 
 	public String getUserrole() {
