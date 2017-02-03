@@ -6,12 +6,13 @@ import org.jboss.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TransactionRequiredException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import gallb.wildfly.users.common.BeanException;
 import gallb.wildfly.users.common.IUser;
-import gallb.wildfly.users.common.UserBeanException;
 import model.User;
 
 @Stateless
@@ -47,8 +48,10 @@ public class UserBean implements IUser{
 		Root<User> member = criteria.from(User.class);
 
 		criteria.select(member).where(cb.like(member.get("username"), "%"+p_searchTxt+"%")).orderBy(cb.asc(member.get("username")));
-		return oEntityManager.createQuery(criteria).getResultList();
-
+		List<User> tmpUserList = oEntityManager.createQuery(criteria).getResultList();
+		oLogger.info("Users found for searchstring: " + p_searchTxt);
+		tmpUserList.forEach(e -> oLogger.info(e.getUsername()));
+		return tmpUserList;
 	}
 
 	@Override
@@ -64,14 +67,22 @@ public class UserBean implements IUser{
 	}
 
 	@Override
-	public boolean remove(String p_id){
+	public boolean remove(String p_id) throws BeanException{
 		User tmpUsr = oEntityManager.find(User.class, p_id); 
 		if (tmpUsr == null) {
-			oLogger.info("--delete by Id UserBean didn't find user--");
-			return false;
+			oLogger.error("--delete by Id UserBean didn't find user--");
+			throw new BeanException("Didn't find entity by id");
 		}
 		oLogger.info("--delete by Id UserBean - user found - call delete--");
-		oEntityManager.remove(tmpUsr);
+		try {
+			oEntityManager.remove(tmpUsr);
+		} catch (IllegalArgumentException e) {
+			oLogger.error(e);
+			throw new BeanException("Illegal argument.");
+		} catch (TransactionRequiredException e) {
+			oLogger.error(e);
+			throw new BeanException("Transaction error.");
+		}
 		return true;
 	}
 

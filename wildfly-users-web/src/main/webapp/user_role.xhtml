@@ -2,12 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
 <title>wildfly-users-web | echo_list</title>
 </head>
 <body>
+	
 	<h1>Get all users</h1>
 	<ui:repeat value="#{userbean.all}" var="value">
      #{value.uuid}  #{value.username} 
@@ -39,10 +41,16 @@
 	<br />
 	
 	<h1>Remove by id</h1>
+	<p:tooltip />
 	<h:form>
+		<h:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 		<h:inputText binding="#{delId}" />
 		<h:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
+		<!--  define message
+		-->
+		
 	</h:form>
+	<p:separator />
 	<br />
 	<br />
 	
@@ -60,8 +68,9 @@
 		<h:inputText binding="#{name}" />
 		<h:commandButton value="Submit" action="#{userbean.search(name.value)}" />
 	</h:form>	
-	<!-- <ui:repeat value="{userbean.getUserList()}" var="value5">
-    #{value5.username} <br />
-	</ui:repeat> -->
+	<ui:repeat value="#{userbean. getUserList()}" var="listelement">
+    #{listelement.username} <br />
+	</ui:repeat> 
+	
 </body>
 </html>

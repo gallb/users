@@ -15,17 +15,18 @@ import javax.naming.NamingException;
 
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.common.ManagedBeanException;
-import gallb.wildfly.users.common.UserBeanException;
+import gallb.wildfly.users.common.BeanException;
 import model.User;
 
-
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 /**
  * @author gallb
  *
  */
 @Named("userbean")
 @ApplicationScoped
-public class ManagedBean implements Serializable, IUser{
+public class ManagedBean implements Serializable{
 
 	/**
 	 * 
@@ -33,9 +34,14 @@ public class ManagedBean implements Serializable, IUser{
 	private Logger oLogger = Logger.getLogger(ManagedBean.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 	private IUser oUserBean = null;
-	private List<User> userList = new ArrayList();
-		
-	@Override
+	private List<User> userList = null;
+	
+	
+	public void error(String message) {
+		oLogger.info("**********************Error CALLED***************************");
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
+    }
+	//@Override
 	public List<User> getAll() {
 		oLogger.info("--getAllUsers()--");
 		return getUserBean().getAll();
@@ -53,13 +59,13 @@ public class ManagedBean implements Serializable, IUser{
 		return oUserBean;
 	}
 
-	@Override
+	//@Override
 	public boolean store(String p_value) {
 		oLogger.info("--store user--");
 		return getUserBean().store(p_value);
 	}
 
-	@Override
+	//@Override
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
 		userList = getUserBean().search(p_searchTxt);
@@ -70,7 +76,7 @@ public class ManagedBean implements Serializable, IUser{
 		return userList;
 	}
 
-	@Override
+	//@Override
 	public boolean update(String p_id, String p_newTxt) {
 		oLogger.info("--update user ManagedBean--id:" + p_id + "new name: " +p_newTxt);
 		if ((p_id != null) && (p_newTxt != null)) {
@@ -79,19 +85,22 @@ public class ManagedBean implements Serializable, IUser{
 		return false;
 	}
 
-	@Override
-	public boolean remove(String p_id) throws UserBeanException {
+	//@Override
+	public boolean remove(String p_id) {
 		oLogger.info("--remove user by Id ManagedBean--");
-		if(!getUserBean().remove(p_id)) {
-			throw new UserBeanException();
+		try {
+			getUserBean().remove(p_id);
+		} catch (BeanException e) {
+			oLogger.error(e);
+			this.error(e.getMessage());
 		}
 		return true;
-		//return getUserBean().remove(p_id);
 	}
 
-	@Override
+	//@Override
 	public User getById(String p_id) {
 		oLogger.info("--search user by Id ManagedBean--");
 		return getUserBean().getById(p_id);
 	}
+	
 }

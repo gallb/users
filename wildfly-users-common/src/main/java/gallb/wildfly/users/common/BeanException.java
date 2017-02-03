@@ -1,21 +1,21 @@
 package gallb.wildfly.users.common;
 
-public class UserBeanException  extends Exception{
+public class BeanException  extends Exception{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2068564507434923735L;
 
-	public UserBeanException() {
+	public BeanException() {
 		super();
 	}
 
-	public UserBeanException(String message, Throwable cause) {
+	public BeanException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public UserBeanException(String message) {
+	public BeanException(String message) {
 		super(message);
 	}
 
