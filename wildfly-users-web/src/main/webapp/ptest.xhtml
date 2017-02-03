@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:f="http://java.sun.com/jsf/core"  
+    xmlns:p="http://primefaces.org/ui">  
+  
+    <h:head>  
+  
+    </h:head>  
+      
+    <h:body>  
+      
+        <p:spinner />  
+        
+        <h:form>
+		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+		<p:inputText binding="#{delId}" />
+		<p:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
+		<!--  define message
+		-->
+		
+		<p:outputLabel for="advanced" value="Advanced:" />
+        <p:selectOneListbox id="advanced" value="#{userbean.all}"  var="t" filter="true" filterMatchMode="contains">
+         <f:selectItems value="#{userbean.all}" var="user" itemLabel="#{user.username}" itemValue="#{user.username}" />
+ 			
+          <!--  <p:column>
+                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
+            </p:column> -->
+ 
+            <p:column>
+                <h:outputText value="#{user.username}" />
+            </p:column> 
+        </p:selectOneListbox>
+		
+		</h:form>
+          
+    </h:body>  
+</html>

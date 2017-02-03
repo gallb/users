@@ -43,9 +43,9 @@
 	<h1>Remove by id</h1>
 	<p:tooltip />
 	<h:form>
-		<h:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-		<h:inputText binding="#{delId}" />
-		<h:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
+		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+		<p:inputText binding="#{delId}" />
+		<p:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
 		<!--  define message
 		-->
 		
