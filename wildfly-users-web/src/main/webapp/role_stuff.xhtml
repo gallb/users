@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<title>wildfly-users-web | echo_list</title>
+</head>
+<body>
+	
+	<h1>Get all roles</h1>
+	<ui:repeat value="#{userbean.allRoles}" var="value">
+     #{value.uuid}  #{value.userrole} 
+     <br />
+	</ui:repeat>
+	<br />
+	<br />	
+	<h1>Add new role</h1>
+	<h:form>
+		<h:inputText binding="#{tmpString}" />
+		<h:commandButton value="Add"
+			action="#{userbean.storeRole(tmpString.value)}" />
+	</h:form>
+	<br />
+	<br />
+	
+	<h1>Search role by id</h1>
+	<h:form>
+		<h:inputText binding="#{tmpString2}" />
+		<h:commandButton  value="Search" 
+				action="#{userbean.getRoleById(tmpString2.value)}" />
+	</h:form>
+	<h2>Search result</h2>
+	 <h:outputText value="#{userbean.getRoleById(tmpString2.value)}"/>
+	<br />
+	<br />
+	
+	<h1>Remove by id</h1>
+	<p:tooltip />
+	<h:form>
+		<h:messages id="message" showDetail="true" autoUpdate="true" closable="true" />
+		<h:inputText binding="#{delId}" />
+		<h:commandButton value="Submit" action="#{userbean.removeRole(delId.value)}" />	
+	</h:form>
+	<p:separator />
+	<br />
+	<br />
+	
+	<h1>Update Role by Id</h1>
+	<h:form>
+		<h:messages id="message" showDetail="true" autoUpdate="true" closable="true" />
+		<h:inputText binding="#{updId}" />
+		<h:inputText binding="#{updName}" />
+		<h:commandButton value="Submit" action="#{userbean.updateRole(updId.value, updName.value)}" />
+	</h:form>
+	<br />
+	<br />
+	
+	<h1>Search role by name</h1>
+	<h:form>
+		<h:inputText binding="#{name}" />
+		<h:commandButton value="Submit" action="#{userbean.searchRole(name.value)}" />
+	</h:form>	
+	<ui:repeat value="#{userbean.getRoleList()}" var="listelement">
+    #{listelement.userrole} <br />
+	</ui:repeat> 	
+</body>
+</html>

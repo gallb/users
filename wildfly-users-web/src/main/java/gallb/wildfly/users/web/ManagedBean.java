@@ -14,8 +14,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import gallb.wildfly.users.common.IUser;
-import gallb.wildfly.users.common.ManagedBeanException;
 import gallb.wildfly.users.common.BeanException;
+import gallb.wildfly.users.common.IRole;
+import model.Role;
 import model.User;
 
 import javax.faces.application.FacesMessage;
@@ -34,18 +35,29 @@ public class ManagedBean implements Serializable{
 	private Logger oLogger = Logger.getLogger(ManagedBean.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 	private IUser oUserBean = null;
+	private IRole oRoleBean = null;
 	private List<User> userList = null;
-	
+	private List<Role> roleList = null;
 	
 	public void error(String message) {
 		oLogger.info("**********************Error CALLED***************************");
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
     }
-	//@Override
+	
 	public List<User> getAll() {
 		oLogger.info("--getAllUsers()--");
 		try {
 			return getUserBean().getAll();
+		} catch (BeanException e) {
+			this.error("Server internal error.");
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Role> getAllRoles() {
+		oLogger.info("--getAllUsers()--");
+		try {
+			return getRoleBean().getAll();
 		} catch (BeanException e) {
 			this.error("Server internal error.");
 		}
@@ -63,8 +75,19 @@ public class ManagedBean implements Serializable{
 		}
 		return oUserBean;
 	}
+	
+	private IRole getRoleBean() {
+		if (oRoleBean == null) {
+			try {
+				InitialContext jndi = new InitialContext();
+				oRoleBean = (IRole) jndi.lookup(IRole.jndiNAME);
+			} catch (NamingException e) {
+				this.error("Server internal error.");
+			}
+		}
+		return oRoleBean;
+	}
 
-	//@Override
 	public boolean store(String p_value) {
 		oLogger.info("--store user--");
 		try {
@@ -75,7 +98,16 @@ public class ManagedBean implements Serializable{
 		return false;
 	}
 
-	//@Override
+	public boolean storeRole(String p_value) {
+		oLogger.info("--store role--");
+		try {
+			return getRoleBean().store(p_value);
+		} catch (BeanException e) {
+			this.error(e.getMessage());
+		}
+		return false;
+	}
+
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
 		userList = new ArrayList<>();
@@ -87,11 +119,25 @@ public class ManagedBean implements Serializable{
 		return userList;
 	}
 	
+	public List<Role> searchRole(String p_searchTxt) {
+		oLogger.info("--search Role--" + p_searchTxt);
+		userList = new ArrayList<>();
+		try {
+			roleList = getRoleBean().search(p_searchTxt);
+		} catch (BeanException e) {
+			this.error(e.getMessage());
+		}		
+		return roleList;
+	}
+	
 	public List<User> getUserList() {
 		return userList;
 	}
+	
+	public List<Role> getRoleList() {
+		return roleList;
+	}
 
-	//@Override
 	public boolean update(String p_id, String p_newTxt) {
 		oLogger.info("--update user ManagedBean--id:" + p_id + "new name: " +p_newTxt);
 		if ((p_id != null) && (p_newTxt != null)) {
@@ -106,8 +152,22 @@ public class ManagedBean implements Serializable{
 		}
 		return true;
 	}
+	
+	public boolean updateRole(String p_id, String p_newTxt) {
+		oLogger.info("--update role ManagedBean--id:" + p_id + "new name: " +p_newTxt);
+		if ((p_id != null) && (p_newTxt != null)) {
+			try {
+				getRoleBean().update(p_id, p_newTxt);
+			} catch (BeanException e) {
+				oLogger.error(e);
+				this.error(e.getMessage());
+			}
+		} else {
+			this.error("Empty field");
+		}
+		return true;
+	}
 
-	//@Override
 	public boolean remove(String p_id) {
 		oLogger.info("--remove user by Id ManagedBean--");
 		if (p_id == "") {
@@ -123,12 +183,38 @@ public class ManagedBean implements Serializable{
 		}
 		return true;
 	}
+	
+	public boolean removeRole(String p_id) {
+		oLogger.info("--remove role by Id ManagedBean--");
+		if (p_id == "") {
+			this.error("Empty field");
+			return false;
+		} else {
+			try {
+				getRoleBean().remove(p_id);
+			} catch (BeanException e) {
+				oLogger.error(e);
+				this.error(e.getMessage());
+			}
+		}
+		return true;
+	}
 
-	//@Override
 	public User getById(String p_id) {
 		oLogger.info("--search user by Id ManagedBean--");
 		try {
 			return getUserBean().getById(p_id);
+		}  catch (BeanException e) {
+			oLogger.error(e);
+			this.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	public Role getRoleById(String p_id) {
+		oLogger.info("--search user by Id ManagedBean--");
+		try {
+			return getRoleBean().getById(p_id);
 		}  catch (BeanException e) {
 			oLogger.error(e);
 			this.error(e.getMessage());
