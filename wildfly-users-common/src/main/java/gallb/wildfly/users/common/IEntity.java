@@ -15,36 +15,41 @@ public interface IEntity<X extends BaseEntity> {
 	/**
 	 * 
 	 * @return List containing all entities.
+	 * @throws BeanException 
 	 */
-	public List<X> getAll();
+	public List<X> getAll() throws BeanException;
 	
 	/**
 	 * 
 	 * @param p_searchTxt String to search for
 	 * @return List of of entities found, empty list if nothing found.
+	 * @throws BeanException 
 	 */
-	public List<X> search(String p_searchTxt);
+	public List<X> search(String p_searchTxt) throws BeanException;
 	
 	/**
 	 * 
 	 * @param p_id Id of entity
 	 * @return Search result entity, null if nothing found.
+	 * @throws BeanException 
 	 */
-	public X getById(String p_id);
+	public X getById(String p_id) throws BeanException;
 	
 	/**
 	 * 
 	 * @param p_value String with new value.
 	 * @return True if operation successful, false if not.
+	 * @throws BeanException 
 	 */
-	public boolean store(String p_value);
+	public boolean store(String p_value) throws BeanException;
 	
 	/**
 	 * 
 	 * @param p_newTxt String with new value.
 	 * @return True if operation successful, false if not.
+	 * @throws BeanException 
 	 */
-	public boolean update(String p_id, String p_newTxt);
+	public boolean update(String p_id, String p_newTxt) throws BeanException;
 	
 	/**
 	 * 

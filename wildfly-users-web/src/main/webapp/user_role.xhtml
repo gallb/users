@@ -43,9 +43,9 @@
 	<h1>Remove by id</h1>
 	<p:tooltip />
 	<h:form>
-		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-		<p:inputText binding="#{delId}" />
-		<p:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
+		<h:messages id="message" showDetail="true" autoUpdate="true" closable="true" />
+		<h:inputText binding="#{delId}" />
+		<h:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
 		<!--  define message
 		-->
 		
@@ -56,6 +56,7 @@
 	
 	<h1>Update Echo by Id</h1>
 	<h:form>
+		<h:messages id="message" showDetail="true" autoUpdate="true" closable="true" />
 		<h:inputText binding="#{updId}" />
 		<h:inputText binding="#{updName}" />
 		<h:commandButton value="Submit" action="#{userbean.update(updId.value, updName.value)}" />
@@ -71,6 +72,17 @@
 	<ui:repeat value="#{userbean. getUserList()}" var="listelement">
     #{listelement.username} <br />
 	</ui:repeat> 
+	
+	<h1>Role</h1>
+	<h:form>
+		<h:messages id="message" showDetail="true" autoUpdate="true" closable="true" />
+		<h:inputText binding="#{usrid}" />
+		<h:inputText binding="#{updRole}" />
+		<h:commandButton value="Add" action="#{userbean.assignRole(usrid.value, updRole.value)}" />
+		<h:commandButton value="Revoke" action="#{userbean.removeRole(usrid.value, updRole.value)}" />
+	</h:form>
+	<br />
+	<br />
 	
 </body>
 </html>
