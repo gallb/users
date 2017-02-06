@@ -47,9 +47,18 @@ public class ManagedBean implements Serializable{
 	private List<User> userList =  new ArrayList<>();
 	private List<Role> roleList = null;
 	private String selectedUser = null;
+	private String selectedRole = null;
 	
 	
 	
+	public String getSelectedRole() {
+		return selectedRole;
+	}
+
+	public void setSelectedRole(String selectedRole) {
+		this.selectedRole = selectedRole;
+	}
+
 	public String getSelectedUser() {
 		return selectedUser;
 	}
