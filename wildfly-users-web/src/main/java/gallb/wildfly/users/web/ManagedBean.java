@@ -10,6 +10,8 @@ import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,13 +23,18 @@ import model.Role;
 import model.User;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 /**
  * @author gallb
  *
  */
 @Named("userbean")
-@ApplicationScoped
+
+//@ApplicationScoped
+//@RequestScoped
+@SessionScoped
+//@ViewScoped
 public class ManagedBean implements Serializable{
 
 	/**
@@ -39,15 +46,15 @@ public class ManagedBean implements Serializable{
 	private IRole oRoleBean = null;
 	private List<User> userList = null;
 	private List<Role> roleList = null;
-	private User selectedUser = null;
+	private String selectedUser = null;
 	
 	
 	
-	public User getSelectedUser() {
+	public String getSelectedUser() {
 		return selectedUser;
 	}
 
-	public void setSelectedUser(User selectedUser) {
+	public void setSelectedUser(String selectedUser) {
 		this.selectedUser = selectedUser;
 	}
 
@@ -70,6 +77,7 @@ public class ManagedBean implements Serializable{
 	
     @PostConstruct
     public void onPostConstruct() {
+    	System.out.println("*************************************postconstruct");
     	userList = new ArrayList<>();
 		try {
 			userList = getUserBean().getAll();
@@ -125,8 +133,15 @@ public class ManagedBean implements Serializable{
 
 	public boolean store(String p_value) {
 		oLogger.info("--store user--");
+		oLogger.info("--store param: " + p_value);
+		if (p_value == "") {
+			this.error("Empty field");
+			return false;
+		}
 		try {
-			return getUserBean().store(p_value);
+			getUserBean().store(p_value);
+			userList = getUserBean().getAll();
+			this.info("Succesfully added: " + p_value);
 		} catch (BeanException e) {
 			this.error(e.getMessage());
 		}
@@ -203,14 +218,16 @@ public class ManagedBean implements Serializable{
 		return true;
 	}
 
-	public boolean remove(String p_id) {
-		oLogger.info("--remove user by Id ManagedBean--");
-		if (p_id == "") {
+	public boolean remove() {
+		oLogger.info("--remove user by Id ManagedBean--p_id: " + selectedUser);
+		if (selectedUser == "") {
 			this.error("Empty field");
 			return false;
 		} else {
 			try {
-				getUserBean().remove(p_id);
+				getUserBean().remove(selectedUser);
+				userList = getUserBean().getAll();
+				selectedUser = userList.get(0).getUuid(); 
 				this.info("Delete succesfull.");
 			} catch (BeanException e) {
 				oLogger.error(e);

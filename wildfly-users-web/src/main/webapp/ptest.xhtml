@@ -1,28 +1,40 @@
-<html xmlns="http://www.w3.org/1999/xhtml"  
-    xmlns:h="http://java.sun.com/jsf/html"  
-    xmlns:f="http://java.sun.com/jsf/core"  
-    xmlns:p="http://primefaces.org/ui">  
-  
-    <h:head>  
-  	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-    </h:head>  
-      
-    <h:body>         
-        <h:form>
-		
-		<p:inputText id="textbox" binding="#{delId}" />
-		<p:commandButton value="Delete" action="#{userbean.remove(delId.value)}" />		
-		</h:form>
-		
-		<h:form>
-		
-		<p:selectOneListbox id="selector" value="#{userbean.selecteduser}">
-    		<f:selectItems value="#{userbean.userList}" var="user" itemValue="#{user.uuid}" itemLabel="#{user.username}" immediate="true"/>
-			<f:ajax execute="selector" render="textbox" />
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+
+<h:body>
+
+	<h:form>
+
+		<p:inputText id="textbox" binding="#{newName}" />
+		<p:commandButton value="Add" action="#{userbean.store(newName.value)}">
+<!-- 			<f:ajax event="change" update="actions_form" /> -->
+
+			<f:param name="p_value" value="#{newName.value}" />
+		</p:commandButton>
+	</h:form>
+
+	<h:form id="actions_form">
+
+		<p:selectOneListbox id="selector" value="#{userbean.selectedUser}">
+			<f:selectItems value="#{userbean.userList}" var="user"
+				itemValue="#{user.uuid}" itemLabel="#{user.username}" />
+			<!-- 			<f:ajax execute="selector" render="textbox" /> -->
+			<f:ajax render="actions_form" />
 		</p:selectOneListbox>
-		<p:commandButton value="All" action="#{userbean.all}" />	
-		<p:commandButton value="Delete" action="#{userbean.remove(delId.value)}" />	 
-		</h:form>
+		<p:commandButton value="All" action="#{userbean.all}" />
+		<p:commandButton value="Delete" action="#{userbean.remove}">
+			<f:ajax render="selector" />
+		</p:commandButton>
 		
-    </h:body>  
+		"#{userbean.selectedUser}"
+		</h:form>
+
+</h:body>
 </html>
