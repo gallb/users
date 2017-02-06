@@ -10,31 +10,36 @@
 
 <h:body>
 
-	<h:form>
-
-		<p:inputText id="textbox" binding="#{newName}" />
-		<p:commandButton value="Add" action="#{userbean.store(newName.value)}">
-<!-- 			<f:ajax event="change" update="actions_form" /> -->
-
-			<f:param name="p_value" value="#{newName.value}" />
-		</p:commandButton>
-	</h:form>
-
 	<h:form id="actions_form">
-
+		<p:commandButton value="List all users" update="selector" action="#{userbean.getAll}">
+		</p:commandButton>
+		<br>
+		</br>
+		
+		<p:inputText id="searchTextBox" binding="#{srch}" />
+		<p:commandButton value="Search" update="actions_form" action="#{userbean.search(srch.value)}">
+			<f:param name="p_value" value="#{srch.value}" />
+		</p:commandButton>
+		
 		<p:selectOneListbox id="selector" value="#{userbean.selectedUser}">
 			<f:selectItems value="#{userbean.userList}" var="user"
 				itemValue="#{user.uuid}" itemLabel="#{user.username}" />
-			<!-- 			<f:ajax execute="selector" render="textbox" /> -->
 			<f:ajax render="actions_form" />
 		</p:selectOneListbox>
-		<p:commandButton value="All" action="#{userbean.all}" />
-		<p:commandButton value="Delete" action="#{userbean.remove}">
-			<f:ajax render="selector" />
+		
+		<p:commandButton value="Delete" update="selector" action="#{userbean.remove}">
+		</p:commandButton>
+		<p:commandButton value="Details" action="userdetails"/>
+		<br>
+		</br>
+		
+		<p:inputText id="textbox" binding="#{newName}" />
+		<p:commandButton value="Add" update="actions_form" action="#{userbean.store(newName.value)}">
+			<f:param name="p_value" value="#{newName.value}" />
 		</p:commandButton>
 		
 		"#{userbean.selectedUser}"
-		</h:form>
+	</h:form>
 
 </h:body>
 </html>

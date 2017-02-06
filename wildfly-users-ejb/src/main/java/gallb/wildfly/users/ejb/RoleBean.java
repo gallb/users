@@ -85,7 +85,7 @@ public class RoleBean implements IRole{
 	}
 
 	@Override
-	public boolean store(String p_value) throws BeanException {
+	public Role store(String p_value) throws BeanException {
 		Role tmpUsr = new Role();
 		tmpUsr.setUserrole(p_value);
 		try {
@@ -97,7 +97,7 @@ public class RoleBean implements IRole{
 			oLogger.error(e);
 			throw new BeanException("Transaction error.");
 		}	
-		return true;	
+		return tmpUsr;	
 	}
 
 	@Override

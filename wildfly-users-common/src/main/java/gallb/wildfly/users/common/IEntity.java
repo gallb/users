@@ -3,6 +3,7 @@ package gallb.wildfly.users.common;
 import java.util.List;
 
 import model.BaseEntity;
+import model.User;
 /**
  * 
  * @author gallb
@@ -41,7 +42,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws BeanException 
 	 */
-	public boolean store(String p_value) throws BeanException;
+	public X store(String p_value) throws BeanException;
 	
 	/**
 	 * 

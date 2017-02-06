@@ -44,7 +44,7 @@ public class ManagedBean implements Serializable{
 	private static final long serialVersionUID = -4702598250751689454L;
 	private IUser oUserBean = null;
 	private IRole oRoleBean = null;
-	private List<User> userList = null;
+	private List<User> userList =  new ArrayList<>();
 	private List<Role> roleList = null;
 	private String selectedUser = null;
 	
@@ -75,7 +75,7 @@ public class ManagedBean implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
     }
 	
-    @PostConstruct
+  //  @PostConstruct
     public void onPostConstruct() {
     	System.out.println("*************************************postconstruct");
     	userList = new ArrayList<>();
@@ -87,9 +87,10 @@ public class ManagedBean implements Serializable{
     }
     
 	public List<User> getAll() {
-		//oLogger.info("--getAllUsers()--");
+		oLogger.info("--getAllUsers()--");
 		userList = new ArrayList<>();
 		try {
+			oLogger.info("--getAllUsers()--users queried");
 			userList = getUserBean().getAll();
 		} catch (BeanException e) {
 			this.error("Server internal error.");
@@ -134,13 +135,16 @@ public class ManagedBean implements Serializable{
 	public boolean store(String p_value) {
 		oLogger.info("--store user--");
 		oLogger.info("--store param: " + p_value);
+		if (p_value.isEmpty()) {
+			this.error("Empty field");
+			return false;
+		}
 		if (p_value == "") {
 			this.error("Empty field");
 			return false;
 		}
 		try {
-			getUserBean().store(p_value);
-			userList = getUserBean().getAll();
+			userList.add(getUserBean().store(p_value));
 			this.info("Succesfully added: " + p_value);
 		} catch (BeanException e) {
 			this.error(e.getMessage());
@@ -148,7 +152,7 @@ public class ManagedBean implements Serializable{
 		return false;
 	}
 
-	public boolean storeRole(String p_value) {
+	/*public boolean storeRole(String p_value) {
 		oLogger.info("--store role--");
 		try {
 			return getRoleBean().store(p_value);
@@ -156,7 +160,7 @@ public class ManagedBean implements Serializable{
 			this.error(e.getMessage());
 		}
 		return false;
-	}
+	}*/
 
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
@@ -188,11 +192,13 @@ public class ManagedBean implements Serializable{
 		return roleList;
 	}
 
-	public boolean update(String p_id, String p_newTxt) {
-		oLogger.info("--update user ManagedBean--id:" + p_id + "new name: " +p_newTxt);
-		if ((p_id != null) && (p_newTxt != null)) {
+	public boolean update(String p_newTxt) {
+		oLogger.info("--update user ManagedBean--id:" + selectedUser + "new name: " +p_newTxt);
+		if ((selectedUser != null) && (p_newTxt != null)) {
 			try {
-				getUserBean().update(p_id, p_newTxt);
+				getUserBean().update(selectedUser, p_newTxt);
+				oLogger.info("**********************update succesfull************************************");
+				this.info("Update succesfull.");
 			} catch (BeanException e) {
 				oLogger.error(e);
 				this.error(e.getMessage());

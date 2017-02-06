@@ -5,6 +5,7 @@ import java.util.List;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TransactionRequiredException;
@@ -46,11 +47,19 @@ public class UserBean implements IUser{
 	}
 
 	@Override
-	public boolean store(String p_value) throws BeanException {
+	public User store(String p_value) throws BeanException {
+		List<User> listByName  = this.search(p_value);
+		if (!listByName.isEmpty()) {
+			oLogger.error("Username allready exists.");
+			throw new BeanException("Username allready exists.");
+		}
 		User tmpUsr = new User();
 		tmpUsr.setUsername(p_value);
 		try {
 			oEntityManager.persist(tmpUsr);
+		} catch (EntityExistsException e) {
+			oLogger.error(e);
+			throw new BeanException("Username allready exists.");
 		} catch (IllegalArgumentException e) {
 			oLogger.error(e);
 			throw new BeanException("Illegal argument.");
@@ -58,7 +67,7 @@ public class UserBean implements IUser{
 			oLogger.error(e);
 			throw new BeanException("Transaction error.");
 		}	
-		return true;
+		return tmpUsr;
 	}
 
 	@Override
