@@ -4,34 +4,25 @@
     xmlns:p="http://primefaces.org/ui">  
   
     <h:head>  
-  
+  	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
     </h:head>  
       
-    <h:body>  
-      
-        <p:spinner />  
-        
+    <h:body>         
         <h:form>
-		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-		<p:inputText binding="#{delId}" />
-		<p:commandButton value="Submit" action="#{userbean.remove(delId.value)}" />
-		<!--  define message
-		-->
 		
-		<p:outputLabel for="advanced" value="Advanced:" />
-        <p:selectOneListbox id="advanced" value="#{userbean.all}"  var="t" filter="true" filterMatchMode="contains">
-         <f:selectItems value="#{userbean.all}" var="user" itemLabel="#{user.username}" itemValue="#{user.username}" />
- 			
-          <!--  <p:column>
-                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
-            </p:column> -->
- 
-            <p:column>
-                <h:outputText value="#{user.username}" />
-            </p:column> 
-        </p:selectOneListbox>
-		
+		<p:inputText id="textbox" binding="#{delId}" />
+		<p:commandButton value="Delete" action="#{userbean.remove(delId.value)}" />		
 		</h:form>
-          
+		
+		<h:form>
+		
+		<p:selectOneListbox id="selector" value="#{userbean.selecteduser}">
+    		<f:selectItems value="#{userbean.userList}" var="user" itemValue="#{user.uuid}" itemLabel="#{user.username}" immediate="true"/>
+			<f:ajax execute="selector" render="textbox" />
+		</p:selectOneListbox>
+		<p:commandButton value="All" action="#{userbean.all}" />	
+		<p:commandButton value="Delete" action="#{userbean.remove(delId.value)}" />	 
+		</h:form>
+		
     </h:body>  
 </html>

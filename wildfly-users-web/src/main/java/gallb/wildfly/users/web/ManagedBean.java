@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jboss.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.naming.InitialContext;
@@ -38,20 +39,54 @@ public class ManagedBean implements Serializable{
 	private IRole oRoleBean = null;
 	private List<User> userList = null;
 	private List<Role> roleList = null;
+	private User selectedUser = null;
 	
+	
+	
+	public User getSelectedUser() {
+		return selectedUser;
+	}
+
+	public void setSelectedUser(User selectedUser) {
+		this.selectedUser = selectedUser;
+	}
+
 	public void error(String message) {
 		oLogger.info("**********************Error CALLED***************************");
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
     }
 	
-	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
+	public void info(String message) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", message));
+    }
+     
+    public void warn(String message) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
+    }
+     
+    public void fatal(String message) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
+    }
+	
+    @PostConstruct
+    public void onPostConstruct() {
+    	userList = new ArrayList<>();
 		try {
-			return getUserBean().getAll();
+			userList = getUserBean().getAll();
 		} catch (BeanException e) {
 			this.error("Server internal error.");
 		}
-		return new ArrayList<>();
+    }
+    
+	public List<User> getAll() {
+		//oLogger.info("--getAllUsers()--");
+		userList = new ArrayList<>();
+		try {
+			userList = getUserBean().getAll();
+		} catch (BeanException e) {
+			this.error("Server internal error.");
+		}
+		return userList;
 	}
 	
 	public List<Role> getAllRoles() {
@@ -176,6 +211,7 @@ public class ManagedBean implements Serializable{
 		} else {
 			try {
 				getUserBean().remove(p_id);
+				this.info("Delete succesfull.");
 			} catch (BeanException e) {
 				oLogger.error(e);
 				this.error(e.getMessage());
