@@ -120,12 +120,14 @@ public class ManagedBean implements Serializable{
 	
 	public List<Role> getAllRoles() {
 		oLogger.info("--getAllUsers()--");
+		userList = new ArrayList<>();
 		try {
-			return getRoleBean().getAll();
+			oLogger.info("--getAllUsers()--users queried");
+			roleList = getRoleBean().getAll();
 		} catch (BeanException e) {
 			this.error("Server internal error.");
 		}
-		return new ArrayList<>();
+		return roleList;
 	}
 	
 	private IUser getUserBean() {
@@ -172,15 +174,25 @@ public class ManagedBean implements Serializable{
 		return false;
 	}
 
-	/*public boolean storeRole(String p_value) {
+	public boolean storeRole(String p_value) {
 		oLogger.info("--store role--");
+		oLogger.info("--store param: " + p_value);
+		if (p_value.isEmpty()) {
+			this.error("Empty field");
+			return false;
+		}
+		if (p_value == "") {
+			this.error("Empty field");
+			return false;
+		}
 		try {
-			return getRoleBean().store(p_value);
+			roleList.add(getRoleBean().store(p_value));
+			this.info("Succesfully added: " + p_value);
 		} catch (BeanException e) {
 			this.error(e.getMessage());
 		}
 		return false;
-	}*/
+	}
 
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
@@ -195,7 +207,7 @@ public class ManagedBean implements Serializable{
 	
 	public List<Role> searchRole(String p_searchTxt) {
 		oLogger.info("--search Role--" + p_searchTxt);
-		userList = new ArrayList<>();
+		roleList = new ArrayList<>();
 		try {
 			roleList = getRoleBean().search(p_searchTxt);
 		} catch (BeanException e) {
@@ -230,17 +242,19 @@ public class ManagedBean implements Serializable{
 		return true;
 	}
 	
-	public boolean updateRole(String p_id, String p_newTxt) {
-		oLogger.info("--update role ManagedBean--id:" + p_id + "new name: " +p_newTxt);
-		if ((p_id != null) && (p_newTxt != null)) {
+	public boolean updateRole(String p_newTxt) {
+		oLogger.info("--update role ManagedBean--id:" + selectedRole + "new name: " +p_newTxt);
+		if ((selectedRole != null) && (p_newTxt.length() >= 3)) {
 			try {
-				getRoleBean().update(p_id, p_newTxt);
+				getRoleBean().update(selectedRole, p_newTxt);
+				oLogger.info("**********************update succesfull************************************");
+				this.info("Update succesfull.");
 			} catch (BeanException e) {
 				oLogger.error(e);
 				this.error(e.getMessage());
 			}
 		} else {
-			this.error("Empty field");
+			this.error("New name too short.");
 		}
 		return true;
 	}
@@ -265,13 +279,16 @@ public class ManagedBean implements Serializable{
 	}
 	
 	public boolean removeRole(String p_id) {
-		oLogger.info("--remove role by Id ManagedBean--");
-		if (p_id == "") {
+		oLogger.info("--remove user by Id ManagedBean--p_id: " + selectedUser);
+		if (selectedRole == "") {
 			this.error("Empty field");
 			return false;
 		} else {
 			try {
-				getRoleBean().remove(p_id);
+				getUserBean().remove(selectedUser);
+				userList = getUserBean().getAll();
+				selectedUser = userList.get(0).getUuid(); 
+				this.info("Delete succesfull.");
 			} catch (BeanException e) {
 				oLogger.error(e);
 				this.error(e.getMessage());

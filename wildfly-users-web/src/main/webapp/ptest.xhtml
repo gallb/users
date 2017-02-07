@@ -9,54 +9,109 @@
 </h:head>
 
 <h:body>
-	<p:panel header="User management"> 
-	<h:form id="actions_form">
-		<p:commandButton value="List all users" update="selector" action="#{userbean.getAll}">
-		</p:commandButton>
-		<br>
-		</br>
-		
-		<p:inputText id="searchTextBox" binding="#{srch}" />
-		<p:commandButton value="Search" update="actions_form" action="#{userbean.search(srch.value)}">
-			<f:param name="p_value" value="#{srch.value}" />
-		</p:commandButton>
-		
-		<p:selectOneListbox id="selector" value="#{userbean.selectedUser}">
-			<f:selectItems value="#{userbean.userList}" var="user"
-				itemValue="#{user.uuid}" itemLabel="#{user.username}" />
-			<f:ajax render="actions_form" />
-		</p:selectOneListbox>
-		
-		<p:commandButton value="Delete" update="selector" action="#{userbean.remove}">
-		</p:commandButton>
-		 <p:commandButton value="Details" update="displayRoles" action="#{userbean.showRoles()}" oncomplete="PF('roleDialog').show()" style="margin-top:5px" />
-		 
-		<br>
-		</br>
-		<p:separator />
-		<p:inputText id="textbox" binding="#{newName}" />
-		<p:commandButton value="Add" update="selector" action="#{userbean.store(newName.value)}">
-			<f:param name="p_value" value="#{newName.value}" />
-		</p:commandButton>
+<h:panelGrid columns="2" cellpadding="10">
+	<p:panel header="User management">
+		<h:form id="actions_form">
+			<p:commandButton value="List all users" update="selector"
+				action="#{userbean.getAll}">
+			</p:commandButton>
+			<br> </br>
+
+			<p:inputText id="searchTextBox" binding="#{srch}" />
+			<p:commandButton value="Search" update="actions_form"
+				action="#{userbean.search(srch.value)}">
+				<f:param name="p_value" value="#{srch.value}" />
+			</p:commandButton>
+
+			<p:selectOneListbox id="selector" value="#{userbean.selectedUser}">
+				<f:selectItems value="#{userbean.userList}" var="user"
+					itemValue="#{user.uuid}" itemLabel="#{user.username}" />
+				<f:ajax render="actions_form" />
+			</p:selectOneListbox>
+
+			<p:commandButton value="Delete" update="selector"
+				action="#{userbean.remove}">
+			</p:commandButton>
+			<p:commandButton value="Details" update="displayRoles"
+				action="#{userbean.showRoles()}"
+				oncomplete="PF('roleDialog').show()" style="margin-top:5px" />
+
+			<br> </br>
+			<p:separator />
+			<p:inputText id="textbox" binding="#{newName}" />
+			<p:commandButton value="Add" update="selector"
+				action="#{userbean.store(newName.value)}">
+				<f:param name="p_value" value="#{newName.value}" />
+			</p:commandButton>
 
 
 
-			<p:dialog modal="true" showEffect="fade" hideEffect="fade"
-				widgetVar="roleDialog" header="#{userbean.currentUser.username}" width="300" height="300">
+			<p:dialog id="first" modal="true" showEffect="fade" hideEffect="fade"
+				widgetVar="roleDialog" header="Details"
+				width="300" height="300">
 				<p:messages id="messages" showDetail="true" autoUpdate="true"
 					closable="true" />
-				<p:inputText id="renameTextBox" binding="#{name}" />
+				<p:inputText id="renameTextBox" binding="#{renameuser}" />
 				<p:commandButton value="Rename" update="selector"
-					action="#{userbean.update(name.value)}">
-					<f:param name="p_newTxt" value="#{name.value}" />
+					action="#{userbean.update(renameuser.value)}">
+					<f:param name="p_newTxt" value="#{renameuser.value}" />
 				</p:commandButton>
 				<p:dataList id="displayRoles" value="#{userbean.currentUser.roles}"
 					var="role" width="250">
 					<h:outputText value="#{role.userrole}" />
 				</p:dataList>
-
 			</p:dialog>
 		</h:form>
-  </p:panel> 
+	</p:panel>
+	
+	<p:panel header="Role management">
+		<h:form id="roleactions_form">
+			<p:commandButton value="List all roles" update="roleselector"
+				action="#{userbean.getAllRoles}">
+			</p:commandButton>
+			<br> </br>
+
+			<p:inputText id="rolesearchTextBox" binding="#{srchRole}" />
+			<p:commandButton value="Search" update="roleactions_form"
+				action="#{userbean.searchRole(srchRole.value)}">
+				<f:param name="p_value" value="#{srchRole.value}" />
+			</p:commandButton>
+
+			<p:selectOneListbox id="roleselector" value="#{userbean.selectedRole}">
+				<f:selectItems value="#{userbean.roleList}" var="role"
+					itemValue="#{role.uuid}" itemLabel="#{role.userrole}" />
+				<f:ajax render="roleactions_form" />
+			</p:selectOneListbox>
+
+			<p:commandButton value="Delete" update="roleselector"
+				action="#{userbean.removeRole}">
+			</p:commandButton>
+			<p:commandButton value="Details" update="renameTextBoxRole"
+				oncomplete="PF('roleDialogForReal').show()" style="margin-top:5px" />
+
+			<br> </br>
+			<p:separator />
+			<p:inputText id="textbox2" binding="#{addnewRoleName}"/>
+			<p:commandButton value="Add" update="roleselector"
+				action="#{userbean.storeRole(addnewRoleName.value)}">
+				<f:param name="p_value" value="#{addnewRoleName.value}" />
+			</p:commandButton>
+
+
+
+			<p:dialog id="second" modal="true" showEffect="fade" hideEffect="fade"
+				widgetVar="roleDialogForReal" header="Details"
+				width="300" height="300">
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+				<p:inputText id="renameTextBoxRole" binding="#{newRoleName}" />
+				<p:commandButton value="Rename" update="roleselector"
+					action="#{userbean.updateRole(newRoleName.value)}">
+					<f:param name="p_newTxt" value="#{newRoleName.value}" />
+				</p:commandButton>
+			</p:dialog>
+		</h:form>
+	</p:panel>
+	</h:panelGrid>
 </h:body>
 </html>

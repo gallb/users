@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -104,20 +105,21 @@ public class RoleBean implements IRole{
 	public boolean update(String p_id, String p_newTxt) throws BeanException {
 		Role tmpUsr = oEntityManager.find(Role.class, p_id);
 		if (tmpUsr == null) {
-			oLogger.info("--delete by Id RoleBean didn't find role--");
+			oLogger.info("--delete by Id RoleBean didn't find user--");
 			throw new BeanException("Didn't find entity by id");
 		}
-		oLogger.info("--update by Id RoleBean - Role found - call update--");
+		oLogger.info("--update by Id RoleBean - role found - call update--");
 		try{
 			tmpUsr.setUserrole(p_newTxt);
-			oEntityManager.merge(tmpUsr);	
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
+			//oEntityManager.merge(tmpUsr);	
+			oEntityManager.flush();
 		} catch (TransactionRequiredException e) {
 			oLogger.error(e);
 			throw new BeanException("Transaction error.");
-		}
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new BeanException("Please verify if given name is not taken.");
+		} 
 		return true;
 	}
 
