@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -101,14 +102,15 @@ public class UserBean implements IUser{
 		oLogger.info("--update by Id UserBean - user found - call update--");
 		try{
 			tmpUsr.setUsername(p_newTxt);
-			oEntityManager.merge(tmpUsr);	
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
+			//oEntityManager.merge(tmpUsr);	
+			oEntityManager.flush();
 		} catch (TransactionRequiredException e) {
 			oLogger.error(e);
 			throw new BeanException("Transaction error.");
-		}
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new BeanException("Please verify if given name is not taken.");
+		} 
 		return true;
 	}
 

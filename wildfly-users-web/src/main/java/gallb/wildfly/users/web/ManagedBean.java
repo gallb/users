@@ -48,9 +48,20 @@ public class ManagedBean implements Serializable{
 	private List<Role> roleList = null;
 	private String selectedUser = null;
 	private String selectedRole = null;
+	private User currentUser = null;
 	
 	
 	
+	public User getCurrentUser() {
+		return currentUser;
+	}
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+	public void showRoles() {
+		currentUser = getById(selectedUser);
+		oLogger.info("Current user:   " + currentUser.getUsername() + " " +currentUser.getRoles().get(0));
+	}
 	public String getSelectedRole() {
 		return selectedRole;
 	}
@@ -203,7 +214,8 @@ public class ManagedBean implements Serializable{
 
 	public boolean update(String p_newTxt) {
 		oLogger.info("--update user ManagedBean--id:" + selectedUser + "new name: " +p_newTxt);
-		if ((selectedUser != null) && (p_newTxt != null)) {
+		if ((selectedUser != null) && (p_newTxt.length() >= 3)) {
+			//if ()
 			try {
 				getUserBean().update(selectedUser, p_newTxt);
 				oLogger.info("**********************update succesfull************************************");
@@ -213,7 +225,7 @@ public class ManagedBean implements Serializable{
 				this.error(e.getMessage());
 			}
 		} else {
-			this.error("Empty field");
+			this.error("New name too short.");
 		}
 		return true;
 	}

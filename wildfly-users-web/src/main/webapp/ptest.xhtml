@@ -9,7 +9,7 @@
 </h:head>
 
 <h:body>
-
+	<p:panel header="User management"> 
 	<h:form id="actions_form">
 		<p:commandButton value="List all users" update="selector" action="#{userbean.getAll}">
 		</p:commandButton>
@@ -29,31 +29,34 @@
 		
 		<p:commandButton value="Delete" update="selector" action="#{userbean.remove}">
 		</p:commandButton>
-		
+		 <p:commandButton value="Details" update="displayRoles" action="#{userbean.showRoles()}" oncomplete="PF('roleDialog').show()" style="margin-top:5px" />
 		 
 		<br>
 		</br>
-		
+		<p:separator />
 		<p:inputText id="textbox" binding="#{newName}" />
 		<p:commandButton value="Add" update="selector" action="#{userbean.store(newName.value)}">
 			<f:param name="p_value" value="#{newName.value}" />
 		</p:commandButton>
-		
-		"#{userbean.selectedUser}"
-		
-		Name will be displayed here.
-		<p:separator />
-		<p:inputText id="renameTextBox" binding="#{name}" />
-		<p:commandButton value="Rename" action="#{userbean.update(name.value)}">
-			<f:param name="p_newTxt" value="#{name.value}" />
-		</p:commandButton>
-		
-	<!--  </h:form>
 
-	<h:form id="user_details">
-		 -->
-		-->
-	</h:form>
 
+
+			<p:dialog modal="true" showEffect="fade" hideEffect="fade"
+				widgetVar="roleDialog" header="#{userbean.currentUser.username}" width="300" height="300">
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+				<p:inputText id="renameTextBox" binding="#{name}" />
+				<p:commandButton value="Rename" update="selector"
+					action="#{userbean.update(name.value)}">
+					<f:param name="p_newTxt" value="#{name.value}" />
+				</p:commandButton>
+				<p:dataList id="displayRoles" value="#{userbean.currentUser.roles}"
+					var="role" width="250">
+					<h:outputText value="#{role.userrole}" />
+				</p:dataList>
+
+			</p:dialog>
+		</h:form>
+  </p:panel> 
 </h:body>
 </html>
