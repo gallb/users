@@ -29,19 +29,18 @@
 		
 		<p:commandButton value="Delete" update="selector" action="#{userbean.remove}">
 		</p:commandButton>
-		<p:commandButton value="Details" update="roleselector" action="#{userbean.getAllRoles}"/>
+		
+		 
 		<br>
 		</br>
 		
 		<p:inputText id="textbox" binding="#{newName}" />
-		<p:commandButton value="Add" update="actions_form" action="#{userbean.store(newName.value)}">
+		<p:commandButton value="Add" update="selector" action="#{userbean.store(newName.value)}">
 			<f:param name="p_value" value="#{newName.value}" />
 		</p:commandButton>
 		
 		"#{userbean.selectedUser}"
-	</h:form>
-
-	<h:form id="user_details">
+		
 		Name will be displayed here.
 		<p:separator />
 		<p:inputText id="renameTextBox" binding="#{name}" />
@@ -49,12 +48,11 @@
 			<f:param name="p_newTxt" value="#{name.value}" />
 		</p:commandButton>
 		
-		<p:selectOneListbox id="roleselector" value="#{userbean.selectedRole}">
-			<f:selectItems value="#{userbean.roleList}" var="role"
-				itemValue="#{role.uuid}" itemLabel="#{role.userrole}" />
-			<f:ajax render="user_details" />
-		</p:selectOneListbox>
-		
+	<!--  </h:form>
+
+	<h:form id="user_details">
+		 -->
+		-->
 	</h:form>
 
 </h:body>
