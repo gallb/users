@@ -9,7 +9,7 @@
 </h:head>
 
 <h:body>
-<h:panelGrid columns="2" cellpadding="10">
+<h:panelGrid columns="3" cellpadding="10">
 	<p:panel header="User management">
 		<h:form id="actions_form">
 			<p:commandButton value="List all users" update="selector"
@@ -62,6 +62,15 @@
 				</p:dataList>
 			</p:dialog>
 		</h:form>
+	</p:panel>
+	
+	<p:panel header="Role assignment">
+		<p:commandButton value="Assign"
+				action="#{userbean.assignRole}">
+		</p:commandButton>
+		<p:commandButton value="Revoke"
+				action="#{userbean.revokeRole}">
+		</p:commandButton>
 	</p:panel>
 	
 	<p:panel header="Role management">

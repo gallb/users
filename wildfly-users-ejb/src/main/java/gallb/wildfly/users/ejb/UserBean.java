@@ -196,7 +196,7 @@ public class UserBean implements IUser{
 		tmpUsr.setRoles(tmpRoleList);
 		try {
 			oLogger.error("************************************IDE ELJUT************************");
-			oEntityManager.merge(tmpUsr);	
+			//oEntityManager.merge(tmpUsr);	
 			oEntityManager.flush();
 		} catch (IllegalArgumentException e) {
 			oLogger.error(e);

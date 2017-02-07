@@ -278,15 +278,15 @@ public class ManagedBean implements Serializable{
 		return true;
 	}
 	
-	public boolean removeRole(String p_id) {
-		oLogger.info("--remove user by Id ManagedBean--p_id: " + selectedUser);
+	public boolean removeRole() {
+		oLogger.info("--remove role by Id ManagedBean--p_id: " + selectedRole);
 		if (selectedRole == "") {
 			this.error("Empty field");
 			return false;
 		} else {
 			try {
-				getUserBean().remove(selectedUser);
-				userList = getUserBean().getAll();
+				getRoleBean().remove(selectedRole);
+				roleList = getRoleBean().getAll();
 				selectedUser = userList.get(0).getUuid(); 
 				this.info("Delete succesfull.");
 			} catch (BeanException e) {
@@ -319,18 +319,19 @@ public class ManagedBean implements Serializable{
 		return null;
 	}
 	
-	public boolean assignRole(String p_userId, String p_roleId) {
+	public boolean assignRole() {
 		oLogger.info("--assign role ManagedBean--");
-		if (p_userId == "") {
-			this.error("Empty field");
+		if (selectedUser == null) {
+			this.error("No user selected.");
 			return false;
 		}
-		if (p_roleId == "") {
-			this.error("Empty field");
+		if (selectedRole == null) {
+			this.error("No role selected.");
 			return false;
 		}
 		try {
-			getUserBean().addRole(p_userId, p_roleId);
+			getUserBean().addRole(selectedUser, selectedRole);
+			this.info("Succesfully assigned.");
 		} catch (BeanException e) {
 			oLogger.error(e);
 			this.error(e.getMessage());
@@ -338,18 +339,19 @@ public class ManagedBean implements Serializable{
 		return true;
 	}
 	
-	public boolean removeRole(String p_userId, String p_roleId) {
+	public boolean revokeRole() {
 		oLogger.info("--revoke role ManagedBean--");
-		if (p_userId == "") {
-			this.error("Empty field");
+		if (selectedUser == null) {
+			this.error("No user selected.");
 			return false;
 		}
-		if (p_roleId == "") {
-			this.error("Empty field");
+		if (selectedRole == null) {
+			this.error("No role selected.");
 			return false;
 		}
 		try {
-			getUserBean().removeRole(p_userId, p_roleId);
+			getUserBean().removeRole(selectedUser, selectedRole);
+			this.info("Succesfully revoked.");
 		} catch (BeanException e) {
 			oLogger.error(e);
 			this.error(e.getMessage());
